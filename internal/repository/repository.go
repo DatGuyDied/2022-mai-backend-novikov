@@ -5,10 +5,15 @@ import (
 
 	"github.com/DatGuyDied/2022-mai-backend-novikov/domain"
 	"github.com/DatGuyDied/2022-mai-backend-novikov/internal/repository/memory"
+	"github.com/DatGuyDied/2022-mai-backend-novikov/internal/repository/postgres"
 )
 
 func NewMemoryRepository() Repository {
 	return memory.New()
+}
+
+func NewPostgresRepository(ctx context.Context) (Repository, error) {
+	return postgres.New(ctx)
 }
 
 type Repository interface {

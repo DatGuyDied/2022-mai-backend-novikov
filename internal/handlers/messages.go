@@ -59,6 +59,7 @@ func (m *Messages) sendMessage(w http.ResponseWriter, r *http.Request) {
 	}
 	var message Message
 	if err := render.Decode(r, &message); err != nil {
+		fmt.Println("bad:", message)
 		render.Status(r, http.StatusBadRequest)
 		render.PlainText(w, r, err.Error())
 		return

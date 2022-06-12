@@ -9,7 +9,7 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 )
 
-const authHeader = "Tfs-Auth-Token"
+const authHeader = "MAI-Backend-Auth-Header"
 
 type ctxMarker struct{}
 

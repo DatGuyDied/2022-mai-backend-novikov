@@ -24,7 +24,10 @@ const shutdownTimeout = 10 * time.Second
 func main() {
 	logger := newLogger()
 
-	repo := repository.NewMemoryRepository()
+	repo, err := repository.NewPostgresRepository(context.Background())
+	if err != nil {
+		logger.Fatal(" Can't creating repo", zap.Error(err))
+	}
 
 	pk, err := rsa.GenerateKey(rand.Reader, rsaBits)
 	if err != nil {
