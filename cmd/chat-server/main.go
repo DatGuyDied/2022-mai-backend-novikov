@@ -5,6 +5,7 @@ import (
 	"crypto/rand"
 	"crypto/rsa"
 	"errors"
+	"github.com/rs/cors"
 	"net/http"
 	"os"
 	"os/signal"
@@ -37,18 +38,21 @@ func main() {
 	messagesHandler := newMessagesHandler(repo)
 	usersHandler := newUsersHandler(repo)
 
-	router := chi.NewRouter()
-	router.Mount(`/auth`, authHandler.Routes())
+	api := chi.NewRouter()
+	api.Mount(`/auth`, authHandler.Routes())
 
-	authRouter := router.With(
+	authRouter := api.With(
 		auth.Middleware(&pk.PublicKey),
 	)
 	authRouter.Mount(`/messages`, messagesHandler.Routes())
 	authRouter.Mount(`/users`, usersHandler.Routes())
 
+	router := chi.NewRouter()
+	router.Mount("/api", api)
+
 	httpServer := http.Server{
-		Addr:    ":8080",
-		Handler: router,
+		Addr:    ":" + os.Getenv("PORT"),
+		Handler: cors.Default().Handler(router),
 	}
 
 	done := make(chan struct{})
@@ -71,7 +75,6 @@ func main() {
 
 	select {
 	case <-done:
-		// Я не знаю английский.
 		logger.Fatal("Unexpected server closed")
 	case <-signals:
 	}

@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/rsa"
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/DatGuyDied/2022-mai-backend-novikov/domain"
@@ -81,6 +82,8 @@ func (a *Auth) register(w http.ResponseWriter, r *http.Request) {
 		render.PlainText(w, r, err.Error())
 		return
 	}
+
+	fmt.Println(uc)
 
 	render.Status(r, http.StatusOK)
 }

@@ -1,6 +1,26 @@
 version: '3.9'
 
-services: 
+services:
+  api-server:
+    restart: always
+    build:
+      context: ./
+      dockerfile: ./deploy/docker/back.dockerfile
+    ports:
+      - 8080:8080
+    environment:
+      PORT: "8080"
+      POSTGRES: "postgres://postgres:password@postgres:5432/mai_backend-2022?sslmode=disable"
+  nginx:
+    restart: always
+    build:
+      context: ./
+      dockerfile: ./deploy/docker/front.dockerfile
+    environment:
+      PORT: '80'
+      API_SERVER_ADDR: 'http://api-server:8080'
+    ports:
+      - 80:80
   postgres:
     image: docker.io/postgres:14.2
     restart: always

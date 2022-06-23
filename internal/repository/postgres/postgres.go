@@ -3,6 +3,7 @@ package postgres
 import (
 	"context"
 	"fmt"
+	"os"
 
 	"entgo.io/ent/dialect"
 	"github.com/DatGuyDied/2022-mai-backend-novikov/ent"
@@ -15,7 +16,7 @@ type postgres struct {
 }
 
 func New(ctx context.Context) (*postgres, error) {
-	client, err := ent.Open(dialect.Postgres, "postgres://postgres:password@localhost:5432/mai_backend-2022?sslmode=disable")
+	client, err := ent.Open(dialect.Postgres, os.Getenv("POSTGRES"))
 	if err != nil {
 		return nil, fmt.Errorf("can not open db: %w", err)
 	}
